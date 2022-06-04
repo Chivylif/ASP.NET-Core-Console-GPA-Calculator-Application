@@ -7,7 +7,7 @@
 //Display the Calculated GPA
 public static class DisplayTable
 {
-    private static int tableWidth = 140;
+    private static int tableWidth = 120;
     public static void Display(List<Courses> courses)
     {
         // Display the courses and their components
@@ -25,17 +25,42 @@ public static class DisplayTable
         Console.WriteLine("-------------------------------------------------------------------------------------------------");
     }
 
+    public static void PrintTable(List<Courses> courses)
+    {
+        PrintDash();
+        PrintHeadings("COURSE CODE", "COURSE UNIT", "SCORE", "GRADE", "GRADE UNIT", "TOTAL POINT", "REMARK");
+        PrintDash();
 
+        foreach (var course in courses)
+        {
+            var totalPoint = course.CourseUnit * course.GradeUnit;
+
+            PrintHeadings(course.CourseCode, course.CourseUnit.ToString(), course.Score.ToString(), course.Grade, course.GradeUnit.ToString(), totalPoint.ToString(), course.Remarks);
+        }
+
+        PrintDash();
+    }
     private static void PrintDash()
     {
         Console.WriteLine(new string('-', tableWidth));
     }
 
-    private static void PrintHeadings(params string[] values)
+    private static void PrintHeadings(params string[] columns)
     {
-        var columnWidth = (tableWidth * values.Length) / values.Length;
+        int columnWidth = (tableWidth - columns.Length) / columns.Length;
+        const string columnSeperator = "|";
 
-        foreach (var value in values)
-            Console.WriteLine();
+        string row = columns.Aggregate(columnSeperator, (seperator, columnText) => seperator + GetCenterAlignedText(columnText, columnWidth) + columnSeperator);
+
+        Console.WriteLine(row);
+    }
+
+    private static string GetCenterAlignedText(string text, int columnWidth)
+    {
+        text = text.Length > columnWidth ? text.Substring(0, columnWidth - 3) + "..." : text;
+
+        return string.IsNullOrEmpty(text)
+            ? new string(' ', columnWidth)
+            : text.PadRight(columnWidth - ((columnWidth - text.Length) / 2)).PadLeft(columnWidth);
     }
 }

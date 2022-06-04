@@ -31,7 +31,7 @@ while (toExit.Contains(input))
     Console.WriteLine("    --------------------------------" + studentName + "'s Result--------------------------------");
 
     //Display the course table
-    DisplayTable.Display(courses);
+    DisplayTable.PrintTable(courses);
 
     //Calculate the totalquantitypoint
     totalPoint = GPACalculator.TotalQuantityPoint(courses);
